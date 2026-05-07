@@ -1,0 +1,350 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+.phone{background:var(--color-background-secondary);border-radius:24px;padding:12px;max-width:375px;margin:0 auto;}
+.screen{background:var(--color-background-primary);border-radius:18px;border:0.5px solid var(--color-border-tertiary);overflow:hidden;min-height:700px;}
+.statusbar{padding:12px 16px 4px;display:flex;justify-content:space-between;align-items:center;}
+.statusbar .time{font-size:15px;font-weight:500;color:var(--color-text-primary);}
+.statusbar .icons{font-size:13px;color:var(--color-text-primary);display:flex;gap:5px;align-items:center;}
+.topbar{padding:4px 16px 12px;}
+.topbar h1{font-size:28px;font-weight:500;color:var(--color-text-primary);letter-spacing:-0.5px;}
+.topbar p{font-size:13px;color:var(--color-text-secondary);margin-top:1px;}
+.phase-card{margin:0 12px 14px;border-radius:16px;padding:14px 16px;}
+.phase-cycle{background:#1a1a2e;}
+.phase-pct{background:#7c3a00;}
+.phase-done{background:#1a3a1a;}
+.phase-label{font-size:11px;font-weight:500;letter-spacing:0.06em;color:rgba(255,255,255,0.6);text-transform:uppercase;margin-bottom:4px;}
+.phase-title{font-size:20px;font-weight:500;color:#fff;margin-bottom:10px;}
+.progress-bar{background:rgba(255,255,255,0.15);border-radius:6px;height:6px;margin-bottom:6px;}
+.progress-fill{height:6px;border-radius:6px;background:#fff;}
+.progress-labels{display:flex;justify-content:space-between;}
+.progress-labels span{font-size:11px;color:rgba(255,255,255,0.6);}
+.section-label{font-size:13px;font-weight:500;color:var(--color-text-secondary);padding:0 16px;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;}
+.med-list{padding:0 12px;margin-bottom:18px;}
+.med-row{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:14px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background 0.1s;}
+.med-row:active{background:var(--color-background-secondary);}
+.med-check{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--color-border-secondary);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;}
+.med-check.done{background:#1a1a2e;border-color:#1a1a2e;}
+.med-check.done i{color:#fff;font-size:14px;}
+.med-check i{color:transparent;font-size:14px;}
+.med-info{flex:1;}
+.med-name{font-size:15px;font-weight:500;color:var(--color-text-primary);}
+.med-dose{font-size:12px;color:var(--color-text-secondary);margin-top:1px;}
+.med-time{font-size:12px;color:var(--color-text-secondary);display:flex;align-items:center;gap:3px;flex-shrink:0;}
+.notif-section{padding:0 12px;margin-bottom:18px;}
+.notif-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:14px;overflow:hidden;}
+.notif-row{padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid var(--color-border-tertiary);}
+.notif-row:last-child{border-bottom:none;}
+.notif-left{display:flex;align-items:center;gap:10px;}
+.notif-left i{font-size:18px;color:var(--color-text-secondary);}
+.notif-text{font-size:14px;color:var(--color-text-primary);}
+.notif-sub{font-size:12px;color:var(--color-text-secondary);margin-top:1px;}
+.toggle{width:44px;height:26px;border-radius:13px;background:var(--color-border-secondary);position:relative;cursor:pointer;transition:background 0.2s;flex-shrink:0;}
+.toggle.on{background:#1a1a2e;}
+.toggle-knob{width:22px;height:22px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:left 0.2s;}
+.toggle.on .toggle-knob{left:20px;}
+.day-strip{display:flex;gap:6px;padding:0 12px;margin-bottom:16px;overflow-x:auto;}
+.day-strip::-webkit-scrollbar{display:none;}
+.day-pill{min-width:40px;padding:8px 0;border-radius:12px;text-align:center;cursor:pointer;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);}
+.day-pill.today{background:#1a1a2e;border-color:#1a1a2e;}
+.day-pill .dn{font-size:11px;color:var(--color-text-secondary);}
+.day-pill .dd{font-size:15px;font-weight:500;color:var(--color-text-primary);margin-top:1px;}
+.day-pill.today .dn,.day-pill.today .dd{color:#fff;}
+.day-pill.taken{border-color:#3b6d11;}
+.day-pill.taken .dd{color:#3b6d11;}
+.notif-banner{margin:0 12px 14px;background:#eaf3de;border:0.5px solid #97c459;border-radius:14px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start;}
+.notif-banner i{font-size:18px;color:#3b6d11;flex-shrink:0;margin-top:1px;}
+.notif-banner-text{font-size:13px;color:#27500a;line-height:1.5;}
+.notif-banner.hidden{display:none;}
+.start-btn{margin:0 12px 20px;width:calc(100% - 24px);padding:14px;border-radius:14px;background:#1a1a2e;color:#fff;font-size:15px;font-weight:500;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+.start-btn i{font-size:18px;}
+.reset-row{text-align:center;padding-bottom:16px;}
+.reset-btn{font-size:13px;color:var(--color-text-secondary);background:none;border:none;cursor:pointer;text-decoration:underline;}
+.done-count{font-size:13px;color:var(--color-text-secondary);text-align:right;padding:0 16px;margin-bottom:6px;}
+</style>
+
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Cycle Tracker App — tägliche Erinnerungen und Einnahmen abhaken</h2>
+
+<div class="phone">
+  <div class="screen">
+    <div class="statusbar">
+      <span class="time" id="clock">09:41</span>
+      <span class="icons"><i class="ti ti-wifi" aria-hidden="true"></i><i class="ti ti-battery" aria-hidden="true"></i></span>
+    </div>
+
+    <div class="topbar">
+      <h1>Cycle Tracker</h1>
+      <p id="date-label">Donnerstag, 7. Mai</p>
+    </div>
+
+    <div id="setup-view">
+      <div style="padding:0 12px 16px;">
+        <div style="background:var(--color-background-secondary);border-radius:14px;padding:16px;">
+          <p style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:12px;">Wann hast du mit dem Cycle gestartet?</p>
+          <input type="date" id="start-date" style="width:100%;font-size:14px;border-radius:10px;padding:10px 12px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);">
+          <p style="font-size:12px;color:var(--color-text-secondary);margin-top:8px;">Cycle: 8 Wochen · PCT: Woche 9–12</p>
+        </div>
+      </div>
+      <button class="start-btn" onclick="startCycle()">
+        <i class="ti ti-player-play" aria-hidden="true"></i>
+        Cycle starten
+      </button>
+    </div>
+
+    <div id="main-view" style="display:none;">
+
+      <div class="phase-card phase-cycle" id="phase-card">
+        <div class="phase-label" id="phase-label">Cycle-Phase</div>
+        <div class="phase-title" id="phase-title">Tag 1 von 56</div>
+        <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:2%"></div></div>
+        <div class="progress-labels">
+          <span id="prog-left">Cycle aktiv</span>
+          <span id="prog-right">56 Tage gesamt</span>
+        </div>
+      </div>
+
+      <div class="day-strip" id="day-strip"></div>
+
+      <div id="notif-banner" class="notif-banner hidden">
+        <i class="ti ti-check" aria-hidden="true"></i>
+        <div class="notif-banner-text">Alle Einnahmen für heute erledigt. Gut gemacht!</div>
+      </div>
+
+      <div class="section-label">Heutige Einnahmen</div>
+      <div class="done-count" id="done-count"></div>
+      <div class="med-list" id="med-list"></div>
+
+      <div class="section-label">Erinnerungen</div>
+      <div class="notif-section">
+        <div class="notif-card" id="notif-card"></div>
+      </div>
+
+      <button class="reset-btn" onclick="resetCycle()" style="display:block;width:100%;text-align:center;padding-bottom:4px;background:none;border:none;cursor:pointer;font-size:13px;color:var(--color-text-secondary);">
+        <span style="text-decoration:underline;">Cycle zurücksetzen</span>
+      </button>
+      <div style="height:20px;"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const CYCLE_MEDS = [
+  {name:'Oxandrolon (Anavar)', dose:'40 mg', time:'08:00', icon:'ti-pill'},
+  {name:'Enclomiphen', dose:'25 mg', time:'08:00', icon:'ti-pill'},
+  {name:'TUDCA', dose:'500 mg', time:'08:30', icon:'ti-shield'},
+  {name:'Omega-3', dose:'3 g', time:'13:00', icon:'ti-droplet'},
+  {name:'Zink', dose:'25 mg', time:'21:00', icon:'ti-moon'},
+  {name:'Vitamin D3', dose:'4000 IU', time:'08:30', icon:'ti-sun'},
+];
+const PCT_MEDS_1 = [
+  {name:'Nolvadex (Tamoxifen)', dose:'40 mg', time:'08:00', icon:'ti-pill'},
+  {name:'Omega-3', dose:'3 g', time:'13:00', icon:'ti-droplet'},
+  {name:'Zink', dose:'25 mg', time:'21:00', icon:'ti-moon'},
+];
+const PCT_MEDS_2 = [
+  {name:'Nolvadex (Tamoxifen)', dose:'20 mg', time:'08:00', icon:'ti-pill'},
+  {name:'Omega-3', dose:'3 g', time:'13:00', icon:'ti-droplet'},
+  {name:'Zink', dose:'25 mg', time:'21:00', icon:'ti-moon'},
+];
+const NOTIF_TIMES = [
+  {label:'Morgen-Einnahme', time:'08:00', icon:'ti-sun'},
+  {label:'Mittag-Einnahme', time:'13:00', icon:'ti-clock'},
+  {label:'Abend-Einnahme', time:'21:00', icon:'ti-moon'},
+];
+const DAYS = ['So','Mo','Di','Mi','Do','Fr','Sa'];
+const MONTHS = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+const WEEKDAYS = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+
+function getState(){return JSON.parse(localStorage.getItem('ct_state')||'null');}
+function saveState(s){localStorage.setItem('ct_state',JSON.stringify(s));}
+function todayKey(){const d=new Date();return d.toISOString().split('T')[0];}
+
+function startCycle(){
+  const d=document.getElementById('start-date').value;
+  if(!d){alert('Bitte Startdatum auswählen.');return;}
+  const state={startDate:d,taken:{}};
+  saveState(state);
+  showMain(state);
+}
+
+function resetCycle(){
+  if(confirm('Cycle wirklich zurücksetzen?')){localStorage.removeItem('ct_state');location.reload();}
+}
+
+function getPhase(dayN){
+  if(dayN<=56) return 'cycle';
+  if(dayN<=84) return 'pct';
+  return 'done';
+}
+
+function getMeds(dayN){
+  if(dayN<=56) return CYCLE_MEDS;
+  if(dayN<=70) return PCT_MEDS_1;
+  if(dayN<=84) return PCT_MEDS_2;
+  return [];
+}
+
+function showMain(state){
+  document.getElementById('setup-view').style.display='none';
+  document.getElementById('main-view').style.display='block';
+  const start=new Date(state.startDate+'T00:00:00');
+  const now=new Date();
+  const today=todayKey();
+  const diffMs=now-start;
+  const dayN=Math.max(1,Math.floor(diffMs/86400000)+1);
+  const phase=getPhase(dayN);
+  const meds=getMeds(dayN);
+  const totalDays=84;
+  const pct=Math.min(100,Math.round(dayN/totalDays*100));
+
+  const pc=document.getElementById('phase-card');
+  const pl=document.getElementById('phase-label');
+  const pt=document.getElementById('phase-title');
+  const pf=document.getElementById('prog-fill');
+  const pr=document.getElementById('prog-right');
+  const prl=document.getElementById('prog-left');
+
+  if(phase==='cycle'){
+    pc.className='phase-card phase-cycle';
+    pl.textContent='Cycle-Phase · Woche '+Math.ceil(dayN/7);
+    pt.textContent='Tag '+dayN+' von 56';
+    pf.style.width=Math.min(100,Math.round(dayN/56*100))+'%';
+    prl.textContent='Anavar 40 mg aktiv';
+    pr.textContent=56-dayN+' Tage verbleibend';
+  } else if(phase==='pct'){
+    pc.className='phase-card phase-pct';
+    const pctDay=dayN-56;
+    pl.textContent='PCT-Phase · Woche '+(Math.ceil(pctDay/7)+8);
+    pt.textContent='PCT-Tag '+pctDay+' von 28';
+    pf.style.width=Math.min(100,Math.round(pctDay/28*100))+'%';
+    prl.textContent=pctDay<=14?'Nolvadex 40 mg':'Nolvadex 20 mg';
+    pr.textContent=28-pctDay+' Tage verbleibend';
+  } else {
+    pc.className='phase-card phase-done';
+    pl.textContent='Cycle abgeschlossen';
+    pt.textContent='Alles erledigt!';
+    pf.style.width='100%';
+    prl.textContent='Erholung';
+    pr.textContent='';
+  }
+
+  const dl=document.getElementById('date-label');
+  const nd=new Date();
+  dl.textContent=WEEKDAYS[nd.getDay()]+', '+nd.getDate()+'. '+MONTHS[nd.getMonth()];
+
+  const strip=document.getElementById('day-strip');
+  strip.innerHTML='';
+  for(let i=-3;i<=3;i++){
+    const d2=new Date(now);d2.setDate(d2.getDate()+i);
+    const k2=d2.toISOString().split('T')[0];
+    const taken=state.taken[k2];
+    const div=document.createElement('div');
+    div.className='day-pill'+(i===0?' today':taken?' taken':'');
+    div.innerHTML='<div class="dn">'+DAYS[d2.getDay()]+'</div><div class="dd">'+d2.getDate()+'</div>';
+    strip.appendChild(div);
+  }
+
+  const ml=document.getElementById('med-list');
+  ml.innerHTML='';
+  const todayTaken=state.taken[today]||[];
+  meds.forEach((m,idx)=>{
+    const done=todayTaken.includes(idx);
+    const row=document.createElement('div');
+    row.className='med-row';
+    row.innerHTML=
+      '<div class="med-check'+(done?' done':'')+'"><i class="ti ti-check" aria-hidden="true"></i></div>'+
+      '<div class="med-info">'+
+        '<div class="med-name">'+m.name+'</div>'+
+        '<div class="med-dose">'+m.dose+'</div>'+
+      '</div>'+
+      '<div class="med-time"><i class="ti ti-clock" style="font-size:13px" aria-hidden="true"></i>'+m.time+'</div>';
+    row.onclick=()=>{
+      if(!state.taken[today]) state.taken[today]=[];
+      const arr=state.taken[today];
+      const pos=arr.indexOf(idx);
+      if(pos>=0) arr.splice(pos,1); else arr.push(idx);
+      saveState(state);
+      showMain(state);
+    };
+    ml.appendChild(row);
+  });
+
+  const done=todayTaken.length;
+  const total=meds.length;
+  document.getElementById('done-count').textContent=done+' von '+total+' erledigt';
+  const banner=document.getElementById('notif-banner');
+  banner.className='notif-banner'+(done===total&&total>0?'':' hidden');
+
+  const nc=document.getElementById('notif-card');
+  nc.innerHTML='';
+  NOTIF_TIMES.forEach((nt,i)=>{
+    const [h,min]=nt.time.split(':').map(Number);
+    const row=document.createElement('div');
+    row.className='notif-row';
+    const tog=`tog${i}`;
+    const active=true;
+    row.innerHTML=
+      '<div class="notif-left">'+
+        '<i class="ti '+nt.icon+'" aria-hidden="true"></i>'+
+        '<div>'+
+          '<div class="notif-text">'+nt.label+'</div>'+
+          '<div class="notif-sub">'+nt.time+' Uhr · täglich</div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="toggle on" id="'+tog+'" onclick="toggleNotif(\''+tog+'\',\''+nt.time+'\',\''+nt.label+'\')">'+
+        '<div class="toggle-knob"></div>'+
+      '</div>';
+    nc.appendChild(row);
+  });
+
+  const clk=document.getElementById('clock');
+  const nn=new Date();
+  clk.textContent=String(nn.getHours()).padStart(2,'0')+':'+String(nn.getMinutes()).padStart(2,'0');
+}
+
+function toggleNotif(id, time, label){
+  const el=document.getElementById(id);
+  const isOn=el.classList.contains('on');
+  if(!isOn){
+    if(Notification&&Notification.permission!=='granted'){
+      Notification.requestPermission().then(p=>{
+        if(p==='granted'){el.classList.add('on');scheduleNotif(time,label);}
+      });
+    } else {
+      el.classList.add('on');
+      scheduleNotif(time,label);
+    }
+  } else {
+    el.classList.remove('on');
+  }
+}
+
+function scheduleNotif(time,label){
+  const [h,m]=time.split(':').map(Number);
+  const now=new Date();
+  const target=new Date();
+  target.setHours(h,m,0,0);
+  if(target<=now) target.setDate(target.getDate()+1);
+  const diff=target-now;
+  setTimeout(()=>{
+    if(Notification&&Notification.permission==='granted'){
+      new Notification('Cycle Tracker', {body:label+' — Zeit für deine Einnahme!'});
+    }
+  },diff);
+}
+
+function init(){
+  const s=getState();
+  if(s){showMain(s);}
+  else{
+    const today=new Date().toISOString().split('T')[0];
+    document.getElementById('start-date').value=today;
+  }
+  setInterval(()=>{
+    const clk=document.getElementById('clock');
+    if(clk){const n=new Date();clk.textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');}
+  },30000);
+}
+init();
+</script>
